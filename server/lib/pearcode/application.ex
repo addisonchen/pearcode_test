@@ -13,6 +13,7 @@ defmodule Pearcode.Application do
       PearcodeWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Pearcode.PubSub},
+      PearcodeWeb.LobbyPresence,
       # Start the Endpoint (http/https)
       PearcodeWeb.Endpoint
       # Start a worker by calling: Pearcode.Worker.start_link(arg)

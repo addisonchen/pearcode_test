@@ -1,27 +1,65 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { ch_join, ch_leave, ch_update, ch_stop_typing } from './socket';
 
-async function fetchUsers() {
-  let text = await fetch("http://localhost:4000/api/v1/users", {});
-  let resp = await text.json();
-  return resp.data;
-}
+export default function App() {
+  const [name, setName] = useState("");
+  const [body, setBody] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [participants, setParticipants] = useState([]);
 
-function App() {
-  const [users, setUsers] = useState([]);
+  function login() {
+    ch_join(name, setBody, setLoggedIn, setParticipants);
+  }
 
-  useEffect(() => {
-    if (users.length === 0) {
-      fetchUsers().then((xs) => setUsers(xs));
+  function handleKeyPress(ev) {
+    if (ev.key === 'Enter') {
+      login();
     }
-  }, [users]);
+  }
+  
+  function handleValueChange(ev) {
+    setName(ev.target.value);
+  }
+
+  function handleCodeChange(ev) {
+    ch_update(ev.target.value);
+  }
+
+  function unFocus() {
+    ch_stop_typing()
+  }
+
+  window.addEventListener('beforeunload', (event) => {
+    ch_leave();
+  });
+
 
   return (
-    <div>
-      <ul>
-        {users.map((uu) => (<li key={uu.id}>{uu.name}</li>))}
-      </ul>
+    <div className="mainContainer">
+      { !loggedIn ? 
+        <div className="flexRow center">
+          <input type="text" value={name} onKeyDown={handleKeyPress} onChange={handleValueChange}></input>
+          <button onClick={login}>Go!</button>
+        </div>
+      :
+        <div className="flexRow">
+          <textarea className="codePad" value={body} onChange={handleCodeChange} onBlur={unFocus}></textarea>
+          <div className="flexCol">
+            { participants.map(p => {
+              return (
+                <div>
+                  <p>{p.name}</p>
+                  { p.typing ? 
+                    <p> - typing!</p>
+                    :
+                    <p> - not typing</p>
+                  }
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      }
     </div>
   );
 }
-
-export default App;

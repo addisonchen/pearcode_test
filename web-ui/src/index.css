@@ -3,4 +3,32 @@
   padding: 0px;
   box-sizing: border-box;
   overflow-x: hidden;
+  font-family: sans-serif;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.codePad {
+  width: 400px;
+  height: 600px;
 }
