@@ -9,3 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias Pearcode.Repo
+alias Pearcode.Users.User
+
+aj = Repo.insert!(%User{name: "aj", password_hash: ""})

@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :pearcode, Pearcode.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "pearcode",
+  password: "aifee5naiN9u",
   database: "pearcode_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
@@ -56,6 +56,11 @@ config :pearcode, PearcodeWeb.Endpoint,
       ~r"lib/pearcode_web/templates/.*(eex)$"
     ]
   ]
+
+config :cors_plug,
+  origin: ["http://localhost:3000"],
+  max_age: 86400,
+  methods: ["GET", "POST", "PATCH", "DELETE"]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
