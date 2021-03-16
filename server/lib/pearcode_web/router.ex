@@ -10,6 +10,7 @@ defmodule PearcodeWeb.Router do
 
     resources "/users", UserController, except: [:new, :edit]
     resources "/files", FileController, except: [:new, :edit]
+    put "/submissions", SubmissionController, :receive_webhook
   end
 
   # Other scopes may use custom stacks.
