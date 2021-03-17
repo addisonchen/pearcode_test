@@ -11,7 +11,7 @@ export default function App() {
   const [result, setResult] = useState({});
 
   function login() {
-    ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting);
+    ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting, setResult);
   }
 
   function handleKeyPress(ev) {
@@ -44,49 +44,72 @@ export default function App() {
 
 
   return (
-    <div className="mainContainer">
+    <div className="mainContainer padding margin">
       { !loggedIn ? 
-        <div className="flexRow center">
+        <div className="flexRow center padding margin">
+          <p style={{paddingRight: "20px"}}>choose a name:</p>
           <input type="text" value={name} onKeyDown={handleKeyPress} onChange={handleValueChange}></input>
           <button onClick={login}>Go!</button>
         </div>
       :
-        <div className="flexRow">
-          <textarea className="codePad" value={body} onChange={handleCodeChange} onBlur={unFocus}></textarea>
-          <div className="flexCol">
-            { participants.map(p => {
-              return (
-                <div>
-                  <p>{p.name}</p>
-                  { p.typing ? 
-                    <p> - typing!</p>
-                    :
-                    <p> - not typing</p>
-                  }
-                </div>
-              )
-            })}
-            <select value={language} onChange={(ev) => setLanguage(ev.target.value)}>
-              <option value={50}>C (GCC 9.2.0)</option>
-              <option value={54}>C++ (GCC 9.2.0)</option>
-              <option value={57}>Elixir</option>
-              <option value={62}>Java 13</option>
-              <option value={63}>JavaScript 12.14</option>
-              <option value={69}>Prolog (GNU 1.4.5)</option>
-              <option value={71}>Python 3</option>
-              <option value={72}>Ruby 2.7</option>
-              <option value={83}>Swift 5</option>
-            </select>
-            <button onClick={execute} disabled={executing}>Run!</button>
+        <div className="flexCol center padding margin">
+          
+          <div className="flexRow">
+            <div>
+              <h3>Write code here</h3>
+              <textarea className="codePad" value={body} onChange={handleCodeChange} onBlur={unFocus}></textarea>
+            </div>
+            <div className="flexCol padding">
+              <h3 className="verticalPadding">Participants:</h3>
+              { participants.map((p, idx) => {
+                return (
+                  <div key={idx}>
+                    <p className="bold">{p.name}</p>
+                    { p.typing ? 
+                      <p> - typing!</p>
+                      :
+                      <p> - not typing</p>
+                    }
+                  </div>
+                )
+              })}
+              <h3 className="verticalPadding">Select Language:</h3>
+              <select value={language} onChange={(ev) => setLanguage(ev.target.value)}>
+                <option value={50}>C (GCC 9.2.0)</option>
+                <option value={54}>C++ (GCC 9.2.0)</option>
+                <option value={57}>Elixir</option>
+                <option value={62}>Java 13</option>
+                <option value={63}>JavaScript 12.14</option>
+                <option value={69}>Prolog (GNU 1.4.5)</option>
+                <option value={71}>Python 3</option>
+                <option value={72}>Ruby 2.7</option>
+                <option value={83}>Swift 5</option>
+              </select>
+              <button onClick={execute} disabled={executing}>Run!</button>
+            </div>
           </div>
-          <div className="resultsContainer">
+          <div className="resultsContainer padding">
             { Object.keys(result).length === 0 ? 
-                <div>
-
-                </div>
+                <>
+                  { executing ? 
+                    <p>Running...</p>
+                    :
+                    <p>Choose a language and click "execute" to run code!</p>
+                  }
+                </>
               :
                 <div>
-                  
+                  { Object.keys(result).map((r, idx) => {
+                    if (typeof result[r] === 'object' && result[r] !== null) {
+                      return (
+                        <p key={idx}><span className="bold">{r}: </span>{JSON.stringify(result[r])}</p>
+                      );
+                    } else {
+                      return (
+                        <p key={idx}><span className="bold">{r}: </span>{result[r]}</p>
+                      );
+                    }
+                  })}
                 </div>
             }
           </div>

@@ -9,6 +9,7 @@ let setBody = null;
 let presence = null;
 let setParticipants = null;
 let setExecuting = null;
+let setResult = null;
 
 function body_update(resp) {
     //console.log(resp);
@@ -25,7 +26,11 @@ function executing_update(executing) {
     setExecuting(executing);
 }
 
-export function ch_join(name, sb, sli, sp, ex) {
+function set_result(result) {
+    setResult(result)
+}
+
+export function ch_join(name, sb, sli, sp, ex, sr) {
     channel = socket.channel("lobby:1", {name: name});
     presence = new Presence(channel);
 
@@ -36,6 +41,7 @@ export function ch_join(name, sb, sli, sp, ex) {
     setBody = sb;
     setParticipants = sp;
     setExecuting = ex
+    setResult = sr
 
     channel.join()
         .receive("ok", (resp) => {
@@ -48,13 +54,9 @@ export function ch_join(name, sb, sli, sp, ex) {
     channel.on("executing", () => {
         executing_update(true);
     });
-    channel.on("finished", (resp) => {
-        executing_update(false);
-        // TODO get result from resp
-    });
     channel.on("submission_result", (resp) => {
-        console.log(resp);
-        executing_update(true);
+        executing_update(false);
+        set_result(resp)
     });
 }
 

@@ -6,6 +6,19 @@
   font-family: sans-serif;
 }
 
+.padding {
+  padding: 20px;
+}
+
+.margin {
+  margin: 20px;
+}
+
+.verticalPadding {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 .mainContainer {
   display: flex;
   flex-direction: column;
@@ -34,6 +47,11 @@
 }
 
 .resultsContainer {
-  width: 400px;
+  width: 100%;
   border: 1px solid black;
+  min-height: 200px;
+}
+
+.bold {
+  font-weight: bold;
 }
