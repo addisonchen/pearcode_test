@@ -50,4 +50,11 @@ defmodule PearcodeWeb.LobbyChannel do
         # todo
         {:noreply, socket}
     end
+
+    def handle_in("set_language", payload, socket) do
+        language_id = payload["language"]
+        broadcast! socket, "new_language", %{language: language_id}
+
+        {:noreply, socket}
+    end
 end

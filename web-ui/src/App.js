@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ch_join, ch_leave, ch_update, ch_stop_typing, ch_execute } from './socket';
+import { ch_join, ch_leave, ch_update, ch_stop_typing, ch_execute, ch_language } from './socket';
 
 export default function App() {
   const [name, setName] = useState("");
@@ -11,7 +11,7 @@ export default function App() {
   const [result, setResult] = useState({});
 
   function login() {
-    ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting, setResult);
+    ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting, setResult, setLanguage);
   }
 
   function handleKeyPress(ev) {
@@ -25,6 +25,10 @@ export default function App() {
   }
 
   function handleCodeChange(ev) {
+    if (ev.keyCode === 9) {
+      ev.preventDefault();
+      // TODO ENABLE TABS
+    }
     ch_update(ev.target.value);
   }
 
@@ -36,6 +40,10 @@ export default function App() {
     if (!executing) {
       ch_execute(language);
     }
+  }
+
+  function handleLanguage(ev) {
+    ch_language(ev.target.value)
   }
 
   window.addEventListener('beforeunload', (event) => {
@@ -74,7 +82,7 @@ export default function App() {
                 )
               })}
               <h3 className="verticalPadding">Select Language:</h3>
-              <select value={language} onChange={(ev) => setLanguage(ev.target.value)}>
+              <select value={language} onChange={handleLanguage}>
                 <option value={50}>C (GCC 9.2.0)</option>
                 <option value={54}>C++ (GCC 9.2.0)</option>
                 <option value={57}>Elixir</option>

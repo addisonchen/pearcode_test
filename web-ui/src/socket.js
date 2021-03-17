@@ -10,6 +10,7 @@ let presence = null;
 let setParticipants = null;
 let setExecuting = null;
 let setResult = null;
+let setLanguage = null;
 
 function body_update(resp) {
     //console.log(resp);
@@ -30,7 +31,11 @@ function set_result(result) {
     setResult(result)
 }
 
-export function ch_join(name, sb, sli, sp, ex, sr) {
+function set_language(language) {
+    setLanguage(language)
+}
+
+export function ch_join(name, sb, sli, sp, ex, sr, sl) {
     channel = socket.channel("lobby:1", {name: name});
     presence = new Presence(channel);
 
@@ -40,8 +45,9 @@ export function ch_join(name, sb, sli, sp, ex, sr) {
 
     setBody = sb;
     setParticipants = sp;
-    setExecuting = ex
-    setResult = sr
+    setExecuting = ex;
+    setResult = sr;
+    setLanguage = sl;
 
     channel.join()
         .receive("ok", (resp) => {
@@ -58,6 +64,9 @@ export function ch_join(name, sb, sli, sp, ex, sr) {
         executing_update(false);
         set_result(resp)
     });
+    channel.on("new_language", (resp) => {
+        set_language(resp["language"])
+    })
 }
 
 export function ch_update(body) {
@@ -74,4 +83,8 @@ export function ch_stop_typing() {
 
 export function ch_execute(language) {
     channel.push("execute", {language: language});
+}
+
+export function ch_language(language) {
+    channel.push("set_language", {language: language});
 }
