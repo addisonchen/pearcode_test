@@ -11,13 +11,13 @@ let setParticipants = null;
 let setExecuting = null;
 
 function body_update(resp) {
-    console.log(resp);
+    //console.log(resp);
     setBody(resp.body);
 }
 
 function participants_update(participants) {
-    console.log('here');
-    console.log(participants);
+    //console.log('here');
+    //console.log(participants);
     setParticipants(participants);
 }
 
@@ -51,6 +51,10 @@ export function ch_join(name, sb, sli, sp, ex) {
     channel.on("finished", (resp) => {
         executing_update(false);
         // TODO get result from resp
+    });
+    channel.on("submission_result", (resp) => {
+        console.log(resp);
+        executing_update(true);
     });
 }
 

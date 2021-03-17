@@ -32,3 +32,8 @@
   width: 400px;
   height: 600px;
 }
+
+.resultsContainer {
+  width: 400px;
+  border: 1px solid black;
+}

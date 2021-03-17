@@ -10,6 +10,7 @@ defmodule PearcodeWeb.LobbyChannel do
         lobby = Lobby.new(payload["name"])
         send(self(), {:after_join, lobby})
         socket = assign(socket, :lobby, lobby)
+        socket = assign(socket, :lobby_id, id)
         socket = assign(socket, :user_name, payload["name"])
         {:ok, lobby, socket}
     end
@@ -43,12 +44,10 @@ defmodule PearcodeWeb.LobbyChannel do
     def handle_in("execute", payload, socket) do
         lobby = socket.assigns[:lobby]
         broadcast! socket, "executing", lobby
-        user = socket.assigns[:user_name]
-        JudgeHandler.execute(lobby[:body], payload["language"], user)
+        lobby_id = socket.assigns[:lobby_id]
+        JudgeHandler.execute(lobby[:body], payload["language"], lobby_id)
 
         # todo
         {:noreply, socket}
     end
-
-
 end

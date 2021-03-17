@@ -6,7 +6,9 @@ export default function App() {
   const [body, setBody] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [participants, setParticipants] = useState([]);
-  const [executing, setExecuting] = useState(false)
+  const [executing, setExecuting] = useState(false);
+  const [language, setLanguage] = useState(71);
+  const [result, setResult] = useState({});
 
   function login() {
     ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting);
@@ -32,7 +34,7 @@ export default function App() {
 
   function execute() {
     if (!executing) {
-      ch_execute();
+      ch_execute(language);
     }
   }
 
@@ -64,15 +66,29 @@ export default function App() {
                 </div>
               )
             })}
-            <select>
+            <select value={language} onChange={(ev) => setLanguage(ev.target.value)}>
               <option value={50}>C (GCC 9.2.0)</option>
               <option value={54}>C++ (GCC 9.2.0)</option>
               <option value={57}>Elixir</option>
               <option value={62}>Java 13</option>
+              <option value={63}>JavaScript 12.14</option>
+              <option value={69}>Prolog (GNU 1.4.5)</option>
               <option value={71}>Python 3</option>
-              <option value={71}>Python 3</option>
+              <option value={72}>Ruby 2.7</option>
+              <option value={83}>Swift 5</option>
             </select>
             <button onClick={execute} disabled={executing}>Run!</button>
+          </div>
+          <div className="resultsContainer">
+            { Object.keys(result).length === 0 ? 
+                <div>
+
+                </div>
+              :
+                <div>
+                  
+                </div>
+            }
           </div>
         </div>
       }

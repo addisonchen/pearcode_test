@@ -10,21 +10,23 @@ defmodule Pearcode.JudgeHandler do
     # Ruby (2.7.0) -> 72
 
 
-    def execute(code, language_id, user_name) do
+    def execute(code, language_id, lobby_id) do
         url = "http://localhost:2358/submissions/?base64_encoded=false&wait=false"
         headers = ["Content-Type": "application/json", "X-Auth-Token": "phut1Vahgh9faik4oire"]
-
-        callback_url = if :env == :dev do
-            "http://172.17.0.1:4000/api/v1/submissions"
+        
+        callback_url = if  Application.get_env(:pearcode, :env) == :dev do
+            "http://172.17.0.1:4000/api/v1/submissions/#{lobby_id}"
         else
             # TODO!!! Change this port to the production port
-            "http://172.17.0.1:PORT/api/v1/submissions"
+            "http://172.17.0.1:PORT/api/v1/submissions/#{lobby_id}"
         end
+
+        IO.puts callback_url
 
         body = Jason.encode!(%{
             source_code: code,
             language_id: language_id,
-            callback_url: "http://172.17.0.1:4000/api/v1/submissions",
+            callback_url: callback_url
         })
         {:ok, response} = HTTPoison.post(url, body, headers)
         IO.inspect response
