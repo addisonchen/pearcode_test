@@ -2,6 +2,7 @@ defmodule PearcodeWeb.LobbyChannel do
     use PearcodeWeb, :channel
 
     alias Pearcode.Lobby
+    alias Pearcode.JudgeHandler
     alias PearcodeWeb.LobbyPresence
 
     @impl true
@@ -35,6 +36,17 @@ defmodule PearcodeWeb.LobbyChannel do
     @impl true
     def handle_in("stoptyping", _payload, socket) do
         LobbyPresence.do_user_update(socket, socket.assigns.user_name, %{typing: false})
+        {:noreply, socket}
+    end
+
+    @impl true
+    def handle_in("execute", payload, socket) do
+        lobby = socket.assigns[:lobby]
+        broadcast! socket, "executing", lobby
+        user = socket.assigns[:user_name]
+        JudgeHandler.execute(lobby[:body], payload["language"], user)
+
+        # todo
         {:noreply, socket}
     end
 
