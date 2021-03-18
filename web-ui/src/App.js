@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { ch_join, ch_leave, ch_update, ch_stop_typing, ch_execute, ch_language } from './socket';
 
 export default function App() {
@@ -10,6 +10,8 @@ export default function App() {
   const [language, setLanguage] = useState(71);
   const [result, setResult] = useState({});
 
+  const codeInput = useRef(null);
+
   function login() {
     ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting, setResult, setLanguage);
   }
@@ -19,16 +21,24 @@ export default function App() {
       login();
     }
   }
+
+  function handleTab(ev) {
+    if (ev.keyCode === 9) {
+      ev.preventDefault();
+      // TODO ENABLE TABS
+      const { selectionStart, selectionEnd } = ev.target;
+      ch_update(body.substring(0, selectionStart) + '  ' + body.substring(selectionEnd));
+      //setTimeout(() => {codeInput.current.selectionStart = codeInput.current.selectionEnd = selectionStart + 2}, 100);
+      codeInput.current.selectionStart = codeInput.current.selectionEnd = selectionStart + 2
+    }
+  }
   
   function handleValueChange(ev) {
     setName(ev.target.value);
   }
 
+
   function handleCodeChange(ev) {
-    if (ev.keyCode === 9) {
-      ev.preventDefault();
-      // TODO ENABLE TABS
-    }
     ch_update(ev.target.value);
   }
 
@@ -65,7 +75,7 @@ export default function App() {
           <div className="flexRow">
             <div>
               <h3>Write code here</h3>
-              <textarea className="codePad" value={body} onChange={handleCodeChange} onBlur={unFocus}></textarea>
+              <textarea className="codePad" ref={codeInput} value={body} onKeyDown={handleTab} onChange={handleCodeChange} onBlur={unFocus}></textarea>
             </div>
             <div className="flexCol padding">
               <h3 className="verticalPadding">Participants:</h3>
