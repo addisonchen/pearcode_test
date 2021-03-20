@@ -12,8 +12,14 @@ export default function App() {
 
   const codeInput = useRef(null);
 
+  function updateBodyState(body) {
+    let st = codeInput.current.selectionStart;
+    setBody(body)
+    codeInput.current.selectionStart = st;
+  }
+
   function login() {
-    ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting, setResult, setLanguage);
+    ch_join(name, updateBodyState, setLoggedIn, setParticipants, setExecuting, setResult, setLanguage);
   }
 
   function handleKeyPress(ev) {

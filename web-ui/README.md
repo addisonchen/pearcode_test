@@ -2,11 +2,8 @@
 
 
 # ideas from katie #
- - files can be shared, have multiple owners/users
-    - would need file -> user table
-    - OPTION 2: 
-        - files have one owner. Each user has a list of files shared with them.
- - download files in filetype
+ - files can
+ type
 
 
 # ideas from aj #
