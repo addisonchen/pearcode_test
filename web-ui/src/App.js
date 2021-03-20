@@ -19,7 +19,7 @@ export default function App() {
   }
 
   function login() {
-    ch_join(name, updateBodyState, setLoggedIn, setParticipants, setExecuting, setResult, setLanguage);
+    ch_join(name, setBody, setLoggedIn, setParticipants, setExecuting, setResult, setLanguage);
   }
 
   function handleKeyPress(ev) {
